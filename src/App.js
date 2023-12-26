@@ -1,9 +1,11 @@
 import './App.css';
+import TodoList from './TodoList';
+
 
 function App() {
   return (
     <div className="App">
-      <h1 className='text-20xl'>Hello World</h1>
+    <TodoList />
     </div>
   );
 }
