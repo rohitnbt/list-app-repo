@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import TodoItem from './TodoItem'
 import CreateTodo from './CreateTodo'
+import { ItemList } from './App';
 
 
 export default function TodoList() {
+  const {item} = useContext(ItemList);
+  console.warn(item);
   return (
    <div>
       <div className='list-box-header'>
@@ -12,8 +15,11 @@ export default function TodoList() {
       </div>
       <div className="list-box-Body">
         <CreateTodo />
-        <TodoItem />
-        <TodoItem />
+        {
+          item.map((todos,key)=>
+        <TodoItem key={key} title={todos.title} id={todos.id}/>
+        )
+        }
       </div>
    </div>
   )
