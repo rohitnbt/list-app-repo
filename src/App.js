@@ -68,7 +68,7 @@ function handleEdit () {
      </ItemList.Provider>
      {
       modal == true ? (<div className='todo-add todo-edit flex flex-col gap-4 justify-between items-center mb-5'>
-      <input className='w-full' value={item[editid-1].title} type="text" onChange={(val)=>item[editid-1].title = val.target.value} />
+      <input className='w-full' value={item[editid-1].title} type="text" onChange={(val)=>val.target.value} />
       <button onClick={()=>{handleEdit()}}>Save</button>
       </div>) : null
      }
