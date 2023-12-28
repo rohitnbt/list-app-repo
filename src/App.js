@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import './App.css';
 import TodoList from './TodoList';
 
@@ -6,31 +6,26 @@ export const ItemList = createContext();
 
 
 function App() {
-  const [item, setItem] = useState([
-    {
-      "id": 1,
-      "title": "go to market"
-    },
-    {
-      "id": 2,
-      "title": "watch movie"
-    },
-    {
-      "id": 3,
-      "title": "wash scooty"
-    },
-    {
-      "id": 4,
-      "title": "buy new gloves"
-    },
-    {
-      "id": 5,
-      "title": "call sam"
+
+ 
+
+  const [item, setItem] = useState([]);
+
+  useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(item));
+  }, [item]);
+
+  useEffect(() => {
+    const item = JSON.parse(localStorage.getItem('items'));
+    if (item) {
+     setItem(item);
     }
-  ]);
+  }, []);
+  
   const getItem =(itemTitle) => {
     let id = item.length;
-    setItem([...item,{"Id" : "id" , title : itemTitle}])
+    setItem([...item,{Id : id+1 , title : itemTitle}])
+    console.warn(item);
   }
 
   const deleteItem = itemId => {
@@ -41,21 +36,28 @@ function App() {
 
   const [modal, setModal] = useState(false);
   const [editid, setEditid] = useState(null);
-  const [edittitle, setEdittitle] = useState(null);
+  const [edittitle, setEdittitle] = useState("");
 
-  function editItem (id) {
-    setModal(true);
+  const editItem = id => {
     
     setEditid(id)
+    const titleFind = item.find(item1 => item1.id === id)
+    setEdittitle(titleFind.title);
+    setModal(true);
+
 }
 
-function handleEditTitle (val) {
-  setEdittitle(val.target.value)
-}
+
 
 function handleEdit () {
+  const updatedItems = item.map(items => {
+    if (items.id === editid) {
+      return { ...items, title: edittitle }; // Change the name here
+    }
+    return items;
+  });
+  setItem(updatedItems);
   setModal(false);
-  alert(edittitle)
 }
 
 
@@ -67,8 +69,8 @@ function handleEdit () {
     </div>
      </ItemList.Provider>
      {
-      modal == true ? (<div className='todo-add todo-edit flex flex-col gap-4 justify-between items-center mb-5'>
-      <input className='w-full' value={item[editid-1].title} type="text" onChange={(val)=>val.target.value} />
+      modal === true ? (<div className='todo-add todo-edit flex flex-col gap-4 justify-between items-center mb-5'>
+      <input className='w-full' value={edittitle} type="text" onChange={(val)=>setEdittitle(val.target.value)} />
       <button onClick={()=>{handleEdit()}}>Save</button>
       </div>) : null
      }

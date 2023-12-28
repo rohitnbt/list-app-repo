@@ -9,7 +9,7 @@ export default function CreateTodo() {
     }
     function putData() {
         getItem(data);
-        setData();
+        setData('');
     }
     return (
         <>
