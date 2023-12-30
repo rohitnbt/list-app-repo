@@ -4,33 +4,33 @@ import TodoList from './TodoList';
 
 export const ItemList = createContext();
 
+let id = 1;
 
 function App() {
 
  
 
-  const [item, setItem] = useState([]);
+  const [item, setItem] = useState(() => {
+    const storedItems = localStorage.getItem('items');
+    return storedItems ? JSON.parse(storedItems) : [];
+  });
 
   useEffect(() => {
     localStorage.setItem('items', JSON.stringify(item));
   }, [item]);
 
-  useEffect(() => {
-    const item = JSON.parse(localStorage.getItem('items'));
-    if (item) {
-     setItem(item);
-    }
-  }, []);
   
-  const getItem =(itemTitle) => {
-    let id = item.length;
-    setItem([...item,{Id : id+1 , title : itemTitle}])
-    console.warn(item);
-  }
+  const getItem = (itemTitle) => {
+    setItem((prevItems) => [
+      ...prevItems,
+      { Id: id, title: itemTitle },
+    ]);
+    id = id + 1;
+  };
 
   const deleteItem = itemId => {
     setItem(oldValues => {
-      return oldValues.filter(item => item.id !== itemId)
+      return oldValues.filter(item => item.Id !== itemId)
     })
   }
 
@@ -41,7 +41,7 @@ function App() {
   const editItem = id => {
     
     setEditid(id)
-    const titleFind = item.find(item1 => item1.id === id)
+    const titleFind = item.find(item1 => item1.Id === id)
     setEdittitle(titleFind.title);
     setModal(true);
 
@@ -49,9 +49,9 @@ function App() {
 
 
 
-function handleEdit () {
-  const updatedItems = item.map(items => {
-    if (items.id === editid) {
+function handleEdit() {
+  const updatedItems = item.map((items) => {
+    if (items.Id === editid) {
       return { ...items, title: edittitle }; // Change the name here
     }
     return items;
@@ -59,6 +59,7 @@ function handleEdit () {
   setItem(updatedItems);
   setModal(false);
 }
+
 
 
   return (

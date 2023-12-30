@@ -6,7 +6,6 @@ import { ItemList } from './App';
 
 export default function TodoList() {
   const {item} = useContext(ItemList);
-  console.warn(item);
   return (
    <div>
       <div className='list-box-header'>
@@ -17,7 +16,7 @@ export default function TodoList() {
         <CreateTodo />
         {
           item.map((todos,key)=>
-        <TodoItem key={key} title={todos.title} id={todos.id}/>
+        <TodoItem key={key} title={todos.title} id={todos.Id}/>
         )
         }
       </div>

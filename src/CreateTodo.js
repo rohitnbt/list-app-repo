@@ -8,7 +8,7 @@ export default function CreateTodo() {
         setData(val.target.value)
     }
     function putData() {
-        getItem(data);
+        data==='' ? alert("please type something in textbox!") : getItem(data);
         setData('');
     }
     return (
